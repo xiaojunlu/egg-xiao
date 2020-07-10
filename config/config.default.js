@@ -23,6 +23,33 @@ module.exports = appInfo => {
     // myAppName: 'egg',
   };
 
+  // add your security config here
+  config.security = {
+    csrf: {
+      enable: false,
+      ignoreJSON: true,
+    },
+  };
+
+  // add your sequelize config here
+  config.sequelize = {
+    dialect: 'mysql',
+    host: '127.0.0.1',
+    port: 3306,
+    database: 'egg-xiao',
+    timezone: '+08:00',
+    dialectOptions: {
+      dateStrings: true,
+      typeCast(field, next) {
+        // for reading from database
+        if (field.type === 'DATETIME') {
+          return field.string();
+        }
+        return next();
+      },
+    },
+  };
+
   return {
     ...config,
     ...userConfig,
