@@ -29,20 +29,22 @@ class Filter {
       const property = `${mode}Fields`;
       console.log(property);
       if (this.hasOwnProperty(property)) {
-        console.log(90090000, property, this[property],data);
-        console.log('++++++++',Object.keys(data));
+        console.log(90090000, property, this[property], data);
+        console.log('++++++++', Object.keys(data));
         const partData = Object.keys(data).filter(
           (item) => this[property].indexOf(item) > -1
         );
 
         //数据交集
-        console.log('-------',partData);
+        console.log('-------', partData);
         // const partData = data.filter(
         //   (item) => this[property].indexOf(item) > -1
         // );
+
         if (this.__proto__.hasOwnProperty(property)) {
           console.log(7777777);
-          this.property(partData);
+          this.simpleFields(partData);
+          //this.property(partData);
         }
 
         // filteredData += partData;
@@ -52,8 +54,8 @@ class Filter {
       }
     }
 
-    data.username = 'sssssss';
-    console.log('+++++++++', this.mode, data);
+    // data.username = 'sssssss';
+    //console.log('+++++++++', this.mode, data);
   }
 }
 
