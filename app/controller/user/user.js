@@ -1,20 +1,30 @@
 'use strict';
 
-const Controller = require('egg').Controller;
+const BaseController = require('../base.js');
 
-class UserController extends Controller {
+class UserController extends BaseController {
 
   // get users list
   async index() {
     const { ctx } = this;
-    const users = await ctx.service.user.user.searchUsers([], [], 0, 10);
-    ctx.body = users;
+    const query = this.ctx.query;
+    // console.log(query);
+
+    const { offset, limit } = await this.getOffsetAndLimit();
+    const orderBys = await this.getSort();
+    const users = await ctx.service.user.user.searchUsers(query, orderBys, offset, limit);
+    const total = await ctx.service.user.user.countUsers(query);
+
+    this.filter({ username: '张三', password: 'aasdafada122' }, 'user.userFilter');
+
+    ctx.body = await this.makePagingObject(users, total, offset, limit);
   }
 
   // user detail
   async show() {
     const { ctx } = this;
     const user = await ctx.service.user.user.getUser(3);
+    console.log(user);
     ctx.body = user;
   }
 
