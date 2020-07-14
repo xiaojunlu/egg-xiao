@@ -30,7 +30,6 @@ class BaseController extends Controller {
    */
   async getSort() {
     const sortStr = this.ctx.query.sort;
-
     if (sortStr) {
       const splitSort = sortStr.split(',');
       const sort = [];
