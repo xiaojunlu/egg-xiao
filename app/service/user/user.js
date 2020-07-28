@@ -1,13 +1,12 @@
-
 'use strict';
 
 const { Op } = require('sequelize');
 const BaseService = require('../base.js');
 
 class UserService extends BaseService {
-
   async getUser(id) {
-    return await this.ctx.model.User.User.findByPk(id);
+    const user = await this.ctx.model.User.User.findByPk(id) || {};
+    return user;
   }
 
   async createUser() {
@@ -16,6 +15,16 @@ class UserService extends BaseService {
       age: 15,
     });
     return user;
+  }
+
+  async updateUser(id) {
+    const user = await this.getUser(id);
+    if (!user) {
+      await this.createException('NOTFOUND_USER');
+    }
+
+    console.log('update user', user);
+    // throw new UserException(403, 'user not found!');
   }
 
   async countUsers(conditions = {}) {
@@ -34,8 +43,7 @@ class UserService extends BaseService {
    * @param {*} limit       每页返回数量 默认为10
    * @param {*} columns     指定返回字段
    */
-  async searchUsers(conditions = {}, orderBy = [], start, limit, columns = [ ]) {
-
+  async searchUsers(conditions = {}, orderBy = [], start, limit, columns = []) {
     const query = {
       attributes: columns.length === 0 ? '' : columns,
       where: await this._prepareSearchConditions(conditions),
@@ -50,7 +58,6 @@ class UserService extends BaseService {
   }
 
   async _prepareSearchConditions(conditions = {}) {
-
     const where = {};
 
     if (conditions.username) {

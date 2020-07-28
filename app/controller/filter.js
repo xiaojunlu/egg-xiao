@@ -11,9 +11,9 @@ class Filter {
       return null;
     }
 
-    const filteredData = {};
-    for (const mode of ['simple', 'public', 'authenticated']) {
-      const property = `${mode}Fields`;
+    let filteredData = {};
+    for (let mode of ['simple', 'public', 'authenticated']) {
+      let property = `${mode}Fields`;
       console.log(property);
       if (this.hasOwnProperty(property)) {
         console.log('++++++++', property, this[property], data);
@@ -24,7 +24,7 @@ class Filter {
         //   (item) => this[property].indexOf(item) > -1
         // );
 
-        const partData = { username: 'asssss' };
+        let partData = { username: 'asssss' };
 
         // for (var item of partData) {
         //   if (!data.hasOwnProperty(item)) {
@@ -32,7 +32,7 @@ class Filter {
         //   }
         // }
 
-        const method = `${property}Filter`;
+        let method = `${property}Filter`;
         console.log('-------', partData, method);
         if (this.__proto__.hasOwnProperty(method)) {
           this[method](data);

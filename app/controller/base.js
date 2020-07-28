@@ -68,12 +68,18 @@ class BaseController extends Controller {
 
   async filter(data, name) {
     const [ module, className ] = name.split('.');
-    console.log(module, className);
     const classFilter = require(`./${module}/${className}.js`);
     const filter = new classFilter();
     filter.filter(data);
-    console.log('----------', data);
     return data;
+  }
+
+  async filters(dataSet, name) {
+    const [ module, className ] = name.split('.');
+    const classFilter = require(`./${module}/${className}.js`);
+    const filter = new classFilter();
+    filter.filters(dataSet);
+    return dataSet;
   }
 }
 
