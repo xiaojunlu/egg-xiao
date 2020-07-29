@@ -11,3 +11,9 @@ exports.validate = {
   enable: true,
   package: 'egg-validate',
 };
+
+// redis plugin
+exports.redis = {
+  enable: false,
+  package: 'egg-redis',
+};
