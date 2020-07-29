@@ -5,26 +5,22 @@ const BaseService = require('../base.js');
 
 class UserService extends BaseService {
   async getUser(id) {
-    const user = await this.ctx.model.User.User.findByPk(id) || {};
+    const user = await this.ctx.model.User.User.findByPk(id);
     return user;
   }
 
-  async createUser() {
-    const user = await this.ctx.model.User.User.create({
-      username: '李梓淇',
-      age: 15,
-    });
+  async createUser(params) {
+    const user = await this.ctx.model.User.User.create(params);
     return user;
   }
 
   async updateUser(id) {
-    const user = await this.getUser(id);
+    let user = await this.getUser(this.ctx.helper.toInt(id));
     if (!user) {
-      await this.createException('NOTFOUND_USER');
+      return this.createException('NOTFOUND_USER');
     }
 
-    console.log('update user', user);
-    // throw new UserException(403, 'user not found!');
+    return user;
   }
 
   async countUsers(conditions = {}) {
@@ -47,7 +43,7 @@ class UserService extends BaseService {
     const query = {
       attributes: columns.length === 0 ? '' : columns,
       where: await this._prepareSearchConditions(conditions),
-      order: orderBy.length === 0 ? [[ 'id', 'DESC' ]] : orderBy,
+      order: orderBy.length === 0 ? [['id', 'DESC']] : orderBy,
       offset: start,
       limit,
     };

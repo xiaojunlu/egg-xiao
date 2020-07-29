@@ -1,7 +1,6 @@
 'use strict';
 
 const BaseController = require('../base.js');
-const HttpException = require('../../exception/http_exception.js');
 
 class UserController extends BaseController {
   // get users list
@@ -30,8 +29,7 @@ class UserController extends BaseController {
     const { ctx } = this;
     const id = ctx.params.id;
     console.log('+++++++', id);
-    // throw new HttpException('UN_LOGIN');
-    // ctx.throw(4030101, '用户不存在');
+    //throw new HttpException('UN_LOGIN');
     const user = await ctx.service.user.user.getUser(id);
     // ctx.body = this.filter(user, 'user.userFilter');
     ctx.body = user;
@@ -40,7 +38,10 @@ class UserController extends BaseController {
   // create user
   async create() {
     const { ctx } = this;
-    // ctx.body = await ctx.service.user.user.createUser();
+    const params = ctx.request.body;
+    ctx.validate({ username: { type: 'username', require: true } }, params);
+    let user = await ctx.service.user.user.createUser(params);
+    ctx.body = user;
   }
 
   // update user

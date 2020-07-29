@@ -2,7 +2,7 @@
 
 // TODO
 class Filter {
-  mode = 'public';
+  //mode = 'public';
 
   filter(data) {
     this.simpleFieldsFilter();
