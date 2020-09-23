@@ -4,14 +4,13 @@ const Controller = require('egg').Controller;
 
 const DEFAULT_PAGING_OFFSET = 0; // 本次响应返回的结果集是从第几个资源起的序号
 
-const DEFAULT_PAGING_LIMIT = 1; // 默认每页数量
+const DEFAULT_PAGING_LIMIT = 10; // 默认每页数量
 
 const MAX_PAGING_LIMIT = 100; // 每页记录最多数量
 
 const PREFIX_SORT_DESC = '-';
 
 class BaseController extends Controller {
-
   /**
    * get paging offset and limit
    */
@@ -50,10 +49,10 @@ class BaseController extends Controller {
 
   /**
    * make paging object
-   * @param {*} objects
-   * @param {*} total
-   * @param {*} offset
-   * @param {*} limit
+   * @param {*} objects  分页对象
+   * @param {*} total    总共有多少个资源
+   * @param {*} offset   结果集是从第几个资源起的序号
+   * @param {*} limit    本次响应返回的结果集最大个行数
    */
   async makePagingObject(objects, total, offset, limit) {
     return {
@@ -70,7 +69,7 @@ class BaseController extends Controller {
     const [ module, className ] = name.split('.');
     const classFilter = require(`./${module}/${className}.js`);
     const filter = new classFilter();
-    filter.filter(data);
+    data = filter.filter(data);
     return data;
   }
 
@@ -78,7 +77,7 @@ class BaseController extends Controller {
     const [ module, className ] = name.split('.');
     const classFilter = require(`./${module}/${className}.js`);
     const filter = new classFilter();
-    filter.filters(dataSet);
+    dataSet = filter.filters(dataSet);
     return dataSet;
   }
 }

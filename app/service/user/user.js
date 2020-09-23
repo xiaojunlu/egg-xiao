@@ -5,17 +5,17 @@ const BaseService = require('../base.js');
 
 class UserService extends BaseService {
   async getUser(id) {
-    const user = await this.ctx.model.User.User.findByPk(id);
+    const user = await this.ctx.model.User.User.findByPk(this.ctx.helper.toInt(id));
     return user;
   }
 
-  async createUser(params) {
-    const user = await this.ctx.model.User.User.create(params);
+  async createUser(formData) {
+    const user = await this.ctx.model.User.User.create(formData);
     return user;
   }
 
   async updateUser(id) {
-    let user = await this.getUser(this.ctx.helper.toInt(id));
+    const user = await this.getUser(id);
     if (!user) {
       return this.createException('NOTFOUND_USER');
     }
@@ -43,7 +43,7 @@ class UserService extends BaseService {
     const query = {
       attributes: columns.length === 0 ? '' : columns,
       where: await this._prepareSearchConditions(conditions),
-      order: orderBy.length === 0 ? [['id', 'DESC']] : orderBy,
+      order: orderBy.length === 0 ? [[ 'id', 'DESC' ]] : orderBy,
       offset: start,
       limit,
     };
@@ -53,6 +53,10 @@ class UserService extends BaseService {
     return users;
   }
 
+  /**
+   * 查询条件处理
+   * @param {*} conditions 查询条件
+   */
   async _prepareSearchConditions(conditions = {}) {
     const where = {};
 

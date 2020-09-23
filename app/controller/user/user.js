@@ -19,20 +19,17 @@ class UserController extends BaseController {
     );
     const total = await ctx.service.user.user.countUsers(query);
     const result = await this.makePagingObject(users, total, offset, limit);
+    console.log('1111', result);
     ctx.body = await this.filters(result, 'user.userFilter');
-
-    // ctx.body = await this.makePagingObject(users, total, offset, limit);
   }
 
   // user detail
   async show() {
     const { ctx } = this;
     const id = ctx.params.id;
-    console.log('+++++++', id);
-    //throw new HttpException('UN_LOGIN');
+    // throw new HttpException('UN_LOGIN');
     const user = await ctx.service.user.user.getUser(id);
-    // ctx.body = this.filter(user, 'user.userFilter');
-    ctx.body = user;
+    ctx.body = await this.filter(user, 'user.userFilter');
   }
 
   // create user
@@ -40,7 +37,7 @@ class UserController extends BaseController {
     const { ctx } = this;
     const params = ctx.request.body;
     ctx.validate({ username: { type: 'username', require: true } }, params);
-    let user = await ctx.service.user.user.createUser(params);
+    const user = await ctx.service.user.user.createUser(params);
     ctx.body = user;
   }
 

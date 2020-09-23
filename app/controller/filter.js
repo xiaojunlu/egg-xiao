@@ -1,57 +1,109 @@
 'use strict';
 
-// TODO
+const _ = require('lodash');
+const moment = require('moment');
+
 class Filter {
-  //mode = 'public';
+  constructor() {
+    this.mode = this.publicMode();
+  }
 
+  setMode(mode) {
+    this.mode = mode;
+  }
+
+  /**
+   * 单条数据过滤
+   * @param {*} data 数据
+   */
   filter(data) {
-    this.simpleFieldsFilter();
-
-    if (Object.keys(data).length === 0) {
-      return null;
+    if (_.isEmpty(data)) {
+      return {};
     }
 
+    data = this.defaultTimeFilter(data);
+
     let filteredData = {};
-    for (let mode of ['simple', 'public', 'authenticated']) {
-      let property = `${mode}Fields`;
-      console.log(property);
+    for (const mode of [
+      this.simpleMode(),
+      this.publicMode(),
+      this.authenticatedMode(),
+    ]) {
+      const property = `${mode}Fields`;
+      const propertyFilter = `${property}Filter`;
       if (this.hasOwnProperty(property)) {
-        console.log('++++++++', property, this[property], data);
-        console.log('--------', Object.keys(data));
-
-        // 数据交集
-        // const partData = Object.keys(data).filter(
-        //   (item) => this[property].indexOf(item) > -1
-        // );
-
-        let partData = { username: 'asssss' };
-
-        // for (var item of partData) {
-        //   if (!data.hasOwnProperty(item)) {
-        //       console.log(item);
-        //   }
-        // }
-
-        let method = `${property}Filter`;
-        console.log('-------', partData, method);
-        if (this.__proto__.hasOwnProperty(method)) {
-          this[method](data);
-          //this.property(partData);
+        let partData = _.pick(data, this[property]);
+        if (this.hasOwnProperty(propertyFilter)) {
+          partData = this[propertyFilter](partData);
         }
 
-        //filteredData += partData;
-        Object.assign(filteredData, partData);
-        if (this.mode == property.replace('Fields', '')) {
+        // console.log(partData);
+        filteredData = _.assign(filteredData, partData);
+        if (this.mode === property.replace('Fields', '')) {
           break;
         }
       }
     }
 
-    if (filteredData) {
+    if (!_.isEmpty(filteredData)) {
       data = filteredData;
     }
 
-    console.log('-=-=-=-=-=', filteredData, data);
+    return data;
+  }
+
+  /**
+   * 多条数据过滤
+   * @param {*} dataSet 数据
+   */
+  filters(dataSet) {
+    if (_.isEmpty(dataSet)) {
+      return {};
+    }
+
+    if (_.has(dataSet, 'data') && _.has(dataSet, 'paging')) {
+      _(dataSet.data).forEach(data => {
+        return this.filter(data);
+      });
+    } else {
+      _(dataSet).forEach(data => {
+        return this.filter(data);
+      });
+    }
+
+    return dataSet;
+  }
+
+  /**
+   * 自动格式化时间
+   * @param {*} data 数据
+   */
+  defaultTimeFilter(data) {
+    if (_.has(data, 'created_time') && _.isNumber(data.created_time)) {
+      data.created_time = moment
+        .unix(data.created_time)
+        .format('YYYY-MM-DD HH:mm');
+    }
+
+    if (_.has(data, 'updated_time') && _.isNumber(data.updated_time)) {
+      data.updated_time = moment
+        .unix(data.updated_time)
+        .format('YYYY-MM-DD HH:mm');
+    }
+
+    return data;
+  }
+
+  simpleMode() {
+    return 'simple';
+  }
+
+  publicMode() {
+    return 'public';
+  }
+
+  authenticatedMode() {
+    return 'authenticated';
   }
 }
 

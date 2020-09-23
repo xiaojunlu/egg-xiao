@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = (app) => {
-  let { validator } = app;
+module.exports = app => {
+  const { validator } = app;
 
   // 校验用户名是否正确
   validator.addRule('username', (rule, value) => {

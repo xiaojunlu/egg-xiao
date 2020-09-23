@@ -1,28 +1,28 @@
 'use strict';
 
-const _ = require('lodash');
+// const _ = require('lodash');
+const Filter = require('../filter');
 
-class UserFilter {
-  filter(data) {
-    console.log('+++++++++++', data);
-    _.unset(data, [ 'password', 'gender' ]);
-    console.log('----------', data);
+class UserFilter extends Filter {
+  constructor() {
+    super();
+    this.mode = this.publicMode();
+    this.simpleFields = [ 'id' ];
+    this.publicFields = [ 'id', 'username', 'created_at', 'created_time' ];
+    this.simpleFieldsFilter = this.simpleFieldsFilter.bind(this);
+    this.publicFieldsFilter = this.publicFieldsFilter.bind(this);
   }
 
-  filters(dataSet) {
-    if (dataSet.length <= 0) {
-      return;
-    }
+  simpleFieldsFilter(data) {
+    data.demo = 123456789;
+    console.log('welcome to simpleFields filter!');
+    return data;
+  }
 
-    if (_.has(dataSet, 'data') && _.has(dataSet, 'paging')) {
-      for (const data of dataSet.data) {
-        this.filter(data);
-      }
-    } else {
-      for (const data of dataSet.data) {
-        this.filter(data);
-      }
-    }
+  publicFieldsFilter(data) {
+    data.username = 1111;
+    console.log('welcome to publicFields filter!');
+    return data;
   }
 }
 
