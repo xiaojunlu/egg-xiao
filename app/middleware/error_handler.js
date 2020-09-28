@@ -11,7 +11,7 @@ module.exports = () => {
       ctx.app.emit('error', err, ctx);
 
       console.log('enter exception handler!', err.httpCode, err.message);
-      let status = err.status || 500;
+      const status = err.status || 500;
       const error = {};
       if (err instanceof HttpException) {
         error.requestUrl = `${ctx.method} : ${ctx.path}`;

@@ -1,14 +1,14 @@
 'use strict';
 
-const ERROR_MAP = require('./error_code.js');
+const ERROR_CODE_MAP = require('./error_code.js');
 
 class HttpException extends Error {
   constructor(type) {
     super();
-    let error = ERROR_MAP[type];
+    let error = ERROR_CODE_MAP[type];
     if (!error) {
       error = {
-        code: 9999999,
+        code: 500,
         message: 'Unknow error type',
       };
     }

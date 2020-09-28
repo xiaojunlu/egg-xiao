@@ -31,6 +31,7 @@ class Filter {
     ]) {
       const property = `${mode}Fields`;
       const propertyFilter = `${property}Filter`;
+
       if (this.hasOwnProperty(property)) {
         let partData = _.pick(data, this[property]);
         if (this.hasOwnProperty(propertyFilter)) {
@@ -79,13 +80,13 @@ class Filter {
    * @param {*} data 数据
    */
   defaultTimeFilter(data) {
-    if (_.has(data, 'created_time') && _.isNumber(data.created_time)) {
+    if (_.find(data, 'created_time') && _.isNumber(data.created_time)) {
       data.created_time = moment
         .unix(data.created_time)
         .format('YYYY-MM-DD HH:mm');
     }
 
-    if (_.has(data, 'updated_time') && _.isNumber(data.updated_time)) {
+    if (_.find(data, 'updated_time') && _.isNumber(data.updated_time)) {
       data.updated_time = moment
         .unix(data.updated_time)
         .format('YYYY-MM-DD HH:mm');
