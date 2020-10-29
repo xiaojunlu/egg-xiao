@@ -6,18 +6,21 @@ class ArticleController extends BaseController {
 
   async search() {
     const { ctx } = this;
-    const query = this.ctx.query;
-    const { offset, limit } = await this.getOffsetAndLimit();
-    const orderBys = await this.getSort();
-    const articles = await ctx.service.article.article.searchArticles(
-      query,
-      orderBys,
-      offset,
-      limit
-    );
-    const total = await ctx.service.article.article.countArticles(query);
-    const result = await this.makePagingObject(articles, total, offset, limit);
-    ctx.body = await this.filters(result, 'article.articleFilter');
+    const a = await ctx.service.wechat.official.getAccessToken({ appid: 1, secret: 2222 });
+
+
+    // const query = this.ctx.query;
+    // const { offset, limit } = await this.getOffsetAndLimit();
+    // const orderBys = await this.getSort();
+    // const articles = await ctx.service.article.article.searchArticles(
+    //   query,
+    //   orderBys,
+    //   offset,
+    //   limit
+    // );
+    // const total = await ctx.service.article.article.countArticles(query);
+    // const result = await this.makePagingObject(articles, total, offset, limit);
+    // ctx.body = await this.filters(result, 'article.articleFilter');
   }
 
   async get() {
