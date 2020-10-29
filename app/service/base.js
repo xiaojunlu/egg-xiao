@@ -6,7 +6,7 @@ const HttpException = require('../exception/http_exception.js');
 class BaseService extends Service {
   /**
    * throw exception
-   * @param {*} exceptionCode
+   * @param {*} exceptionCode 异常码
    */
   async createException(exceptionCode) {
     throw new HttpException(exceptionCode);
