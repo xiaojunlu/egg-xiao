@@ -6,7 +6,8 @@ class ArticleController extends BaseController {
 
   async search() {
     const { ctx } = this;
-    const a = await ctx.service.wechat.official.getAccessToken({ appid: 1, secret: 2222 });
+    // 38_p-aFlYPcDEW8qB3EfQTnA6O36sV8u290a1tpbSUQZdRpSl-hqP9-BtyPWxfKigVHmXO7oiFZUahrltB3AlAGQKexGRIbybYKjGeqUKHcwpzEV0Zo5uu8j1o4n0y4E2Y7iLJb6U52sNmuXRl-XNOfAAASIJ
+    ctx.body = await ctx.service.wechat.official.createTempQrcode('38_Lfdp0fr1WSTJc5JFuZBoGVBzkXL67kvnT2tzwMgDz-FW8gRA-E7Ms0-zjsphIbaoNNX0dJv7XA4UyHRfAliePfa-jimEK8nMcQOoxuYrPugx34pI6vpy_EvmkF4lmNwEJSVxAeGZPOJ0OUiAIZDfABAMDH', 1000, 3600);
 
 
     // const query = this.ctx.query;
